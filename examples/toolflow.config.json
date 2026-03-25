@@ -15,6 +15,14 @@
       "config": {
         "baseUrl": "https://example.com/api"
       }
+    },
+    {
+      "name": "nixos-bridge",
+      "module": "./src/plugins/nixos-bridge.ts",
+      "enabled": true,
+      "config": {
+        "command": "mcp-nixos"
+      }
     }
   ]
 }

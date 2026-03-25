@@ -154,7 +154,7 @@ async function getBridgeClient(bridge: BridgeDefinition): Promise<BridgeClientSt
 async function createBridgeClient(bridge: BridgeDefinition): Promise<BridgeClientState> {
   const client = new Client({
     name: `toolflow-bridge-${bridge.name}`,
-    version: "0.2.0",
+    version: "0.3.0",
   });
   const transport = new StdioClientTransport({
     command: bridge.transport.command,

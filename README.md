@@ -125,6 +125,7 @@ The generic bridge helper launches the upstream MCP server over stdio, lists its
 Current first bridge:
 
 - `flox-bridge` in [`src/plugins/flox-bridge.ts`](/home/rona/Repositories/@runtime-intel/toolflow-mcp/src/plugins/flox-bridge.ts)
+- `nixos-bridge` in [`src/plugins/nixos-bridge.ts`](/home/rona/Repositories/@runtime-intel/toolflow-mcp/src/plugins/nixos-bridge.ts)
 
 ## Built-In Verbs
 
@@ -144,6 +145,10 @@ flox.search_packages '{"search_term":"python","limit":5}'
 
 ```text
 flox.run_command '{"working_dir":"/home/rona","environment_dir":"","command":"command -v bun"}'
+```
+
+```text
+nixos.nix '{"action":"search","source":"nixos","type":"packages","query":"ripgrep","limit":3}'
 ```
 
 ## Install
