@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    {
+      "name": "example-http",
+      "module": "./src/plugins/example-http.ts",
+      "enabled": true,
+      "config": {
+        "baseUrl": "https://example.com/api"
+      }
+    }
+  ]
+}

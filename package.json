@@ -1,0 +1,52 @@
+{
+  "name": "toolflow-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pipe-oriented MCP server with config-loaded verbs and plugins",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/runtime-intel/toolflow-mcp.git"
+  },
+  "homepage": "https://github.com/runtime-intel/toolflow-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/runtime-intel/toolflow-mcp/issues"
+  },
+  "keywords": [
+    "bun",
+    "mcp",
+    "toolflow",
+    "pipeline",
+    "functional",
+    "plugin"
+  ],
+  "packageManager": "bun@1.3.10",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "toolflow": "./bin/toolflow"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    ".mcp.json",
+    "examples",
+    "toolflow.config.json",
+    "toolflow.secrets.example.json"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.27.1",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.10"
+  },
+  "scripts": {
+    "check": "bun --eval \"JSON.parse(await Bun.file('package.json').text()); console.log('package.json ok')\"",
+    "dev": "bun run ./src/server.ts",
+    "pack": "bun pm pack --destination dist"
+  }
+}
