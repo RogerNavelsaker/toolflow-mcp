@@ -5,7 +5,7 @@
 The model-facing surface is intentionally small:
 
 - Binary: `toolflow`
-- Primary tool: `toolflow_run`
+- Primary tool: `toolflow`
 - Introspection tool: `toolflow_registry`
 
 The design takes inspiration from F# pipe-forward composition, higher-order functional combinators, and Nushell-style structured data flow, while keeping the MCP surface generic enough to evolve through local plugins instead of upstreaming every verb.
@@ -108,7 +108,7 @@ type PluginDefinition = {
 };
 ```
 
-Plugin verbs are wired into `toolflow_run`, and plugin-defined direct MCP tools are also registered at server startup. That gives you mixed mode from the start: pipe verbs plus standalone MCP tools loaded from local modules.
+Plugin verbs are wired into `toolflow`, and plugin-defined direct MCP tools are also registered at server startup. That gives you mixed mode from the start: pipe verbs plus standalone MCP tools loaded from local modules.
 
 ## MCP Bridge Plugins
 

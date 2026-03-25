@@ -1,6 +1,6 @@
 {
   "name": "toolflow-mcp",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "private": true,
   "description": "Compositional MCP pipeline server with Nushell-style data passing",
   "license": "MIT",
@@ -26,7 +26,8 @@
     "access": "public"
   },
   "bin": {
-    "toolflow": "./bin/toolflow"
+    "toolflow": "./bin/toolflow",
+    "tf": "./bin/tf"
   },
   "files": [
     "bin",

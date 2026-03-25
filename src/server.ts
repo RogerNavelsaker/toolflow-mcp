@@ -20,16 +20,16 @@ const server = new McpServer(
 );
 
 server.registerTool(
-  "toolflow_run",
+  "toolflow",
   {
-    title: "Toolflow Run",
-    description: "Runs a Toolflow pipeline script and returns a Result container with trace metadata.",
+    title: "Toolflow",
+    description: "Runs a Toolflow flow and returns a Result container with trace metadata.",
     inputSchema: {
-      script: z.string().min(1),
+      flow: z.string().min(1),
     },
   },
-  async ({ script }) => {
-    const result = await runPipeline(script, runtime.registry, {
+  async ({ flow }) => {
+    const result = await runPipeline(flow, runtime.registry, {
       cwd: process.cwd(),
       configPath: runtime.configPath,
       secretsPath: runtime.secretsPath,
