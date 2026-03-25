@@ -1,5 +1,6 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import type { Stream } from "node:stream";
 import { z } from "zod";
 import type {
   BridgeDefinition,
@@ -15,6 +16,7 @@ type BridgeClientState = {
   client: Client;
   transport: StdioClientTransport;
   tools: ToolDescriptor[];
+  stderrTail: string;
 };
 
 const bridgeClients = new Map<string, Promise<BridgeClientState>>();
@@ -154,27 +156,61 @@ async function getBridgeClient(bridge: BridgeDefinition): Promise<BridgeClientSt
 async function createBridgeClient(bridge: BridgeDefinition): Promise<BridgeClientState> {
   const client = new Client({
     name: `toolflow-bridge-${bridge.name}`,
-    version: "0.3.0",
+    version: "0.3.1",
   });
+  const stderrMode = bridge.transport.stderrMode ?? "capture";
   const transport = new StdioClientTransport({
     command: bridge.transport.command,
     args: bridge.transport.args,
     env: bridge.transport.env,
     cwd: bridge.transport.cwd,
-    stderr: "inherit",
+    stderr: stderrMode === "inherit" ? "inherit" : "pipe",
   });
-  await client.connect(transport);
-  const listed = await client.listTools();
-  return {
-    client,
-    transport,
-    tools: listed.tools.map((tool) => ({
-      name: tool.name,
-      description: tool.description,
-      inputSchema: tool.inputSchema as Record<string, unknown> | undefined,
-      outputSchema: tool.outputSchema as Record<string, unknown> | undefined,
-    })),
-  };
+  let stderrTail = "";
+  if (stderrMode === "capture") {
+    captureBridgeStderr(transport.stderr, (chunk) => {
+      stderrTail = appendStderrTail(stderrTail, chunk);
+    });
+  }
+
+  try {
+    await client.connect(transport);
+    const listed = await client.listTools();
+    return {
+      client,
+      transport,
+      stderrTail,
+      tools: listed.tools.map((tool) => ({
+        name: tool.name,
+        description: tool.description,
+        inputSchema: tool.inputSchema as Record<string, unknown> | undefined,
+        outputSchema: tool.outputSchema as Record<string, unknown> | undefined,
+      })),
+    };
+  } catch (error) {
+    const note = stderrTail.trim();
+    if (note.length > 0 && error instanceof Error) {
+      error.message = `${error.message}\n\nBridge stderr:\n${note}`;
+    }
+    throw error;
+  }
+}
+
+function captureBridgeStderr(stream: Stream | null, onChunk: (chunk: string) => void) {
+  if (!stream) return;
+  stream.setEncoding?.("utf8");
+  stream.on("data", (chunk) => {
+    if (typeof chunk === "string") {
+      onChunk(chunk);
+      return;
+    }
+    onChunk(String(chunk));
+  });
+}
+
+function appendStderrTail(current: string, chunk: string) {
+  const next = `${current}${chunk}`;
+  return next.length > 4096 ? next.slice(-4096) : next;
 }
 
 function resolveMappings(bridge: BridgeDefinition, tools: ToolDescriptor[]): BridgeToolMapping[] {

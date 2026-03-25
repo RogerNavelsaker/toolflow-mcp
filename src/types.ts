@@ -87,6 +87,7 @@ export type BridgeTransportConfig = {
   args?: string[];
   env?: Record<string, string>;
   cwd?: string;
+  stderrMode?: "capture" | "inherit";
 };
 
 export type BridgeToolMapping = {

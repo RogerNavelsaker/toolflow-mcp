@@ -1,6 +1,6 @@
 # toolflow-mcp
 
-`toolflow-mcp` is a Bun MCP server for pipe-oriented tool composition.
+`toolflow-mcp` is a Bun MCP server for railway-oriented pipelines and Nushell-style data passing.
 
 The model-facing surface is intentionally small:
 
@@ -8,7 +8,7 @@ The model-facing surface is intentionally small:
 - Primary tool: `railway_pipe`
 - Introspection tool: `toolflow_registry`
 
-The design takes inspiration from F# pipe-forward composition and Nushell-style data shaping, but keeps the MCP surface generic enough to evolve by loading new local plugins instead of upstreaming every verb.
+The design takes inspiration from F# pipe-forward composition, Railway Oriented Programming, and Nushell-style structured data flow, while keeping the MCP surface generic enough to evolve through local plugins instead of upstreaming every verb.
 
 ## Goals
 
@@ -17,6 +17,7 @@ The design takes inspiration from F# pipe-forward composition and Nushell-style 
 - Stop on failure and return a structured post-mortem trace.
 - Load new verbs from local modules via config and secrets files.
 - Bridge other MCP servers behind one client-visible MCP entry.
+- Keep upstream bridge stderr out of the user-facing client path unless a bridge fails.
 
 ## DSL
 
@@ -120,7 +121,7 @@ Current mapping model:
 - Generic bridge direct tool: `flox_call`
 - Selected explicit direct tools for high-value cases: `flox_search_packages`, `flox_install_package`, `flox_run_command`
 
-The generic bridge helper launches the upstream MCP server over stdio, lists its tools, and re-exposes them inside `toolflow`.
+The generic bridge helper launches the upstream MCP server over stdio, lists its tools, re-exposes them inside `toolflow`, and captures upstream stderr so startup banners do not leak into client sessions.
 
 Current first bridge:
 
@@ -173,7 +174,8 @@ Minimal MCP config:
 ## Scope
 
 - Bun-first MCP runtime
-- Functional pipeline execution with trace output
+- Railway-oriented pipeline execution with trace output
+- Nushell-style structured data passing between steps
 - Configurable plugin loading
 
 ## Next

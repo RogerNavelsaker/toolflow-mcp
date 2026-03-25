@@ -11,11 +11,11 @@ const runtime = await loadRuntime(process.cwd());
 const server = new McpServer(
   {
     name: "toolflow-mcp",
-    version: "0.3.0",
+    version: "0.3.1",
   },
   {
     instructions:
-      "Toolflow executes pipe-oriented workflows. Configure plugins in toolflow.config.json and keep credentials in toolflow.secrets.json.",
+      "Toolflow executes railway-oriented pipelines with Nushell-style data passing. Configure plugins in toolflow.config.json and keep credentials in toolflow.secrets.json.",
   },
 );
 
@@ -23,7 +23,7 @@ server.registerTool(
   "railway_pipe",
   {
     title: "Railway Pipe",
-    description: "Runs a Toolflow pipeline script and returns a Result container with trace metadata.",
+    description: "Runs a railway-oriented Toolflow pipeline and returns a Result container with trace metadata.",
     inputSchema: {
       script: z.string().min(1),
     },
@@ -45,7 +45,7 @@ server.registerTool(
   "toolflow_registry",
   {
     title: "Toolflow Registry",
-    description: "Lists built-in and plugin-loaded verbs available to railway_pipe.",
+    description: "Lists built-in and plugin-loaded verbs and tools available to the Toolflow pipeline runtime.",
   },
   async () => {
     const payload = {
