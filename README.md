@@ -1,14 +1,14 @@
 # toolflow-mcp
 
-`toolflow-mcp` is a Bun MCP server for railway-oriented pipelines and Nushell-style data passing.
+`toolflow-mcp` is a Bun MCP server for compositional pipelines and Nushell-style data passing.
 
 The model-facing surface is intentionally small:
 
 - Binary: `toolflow`
-- Primary tool: `railway_pipe`
+- Primary tool: `toolflow_run`
 - Introspection tool: `toolflow_registry`
 
-The design takes inspiration from F# pipe-forward composition, Railway Oriented Programming, and Nushell-style structured data flow, while keeping the MCP surface generic enough to evolve through local plugins instead of upstreaming every verb.
+The design takes inspiration from F# pipe-forward composition, higher-order functional combinators, and Nushell-style structured data flow, while keeping the MCP surface generic enough to evolve through local plugins instead of upstreaming every verb.
 
 ## Goals
 
@@ -108,7 +108,7 @@ type PluginDefinition = {
 };
 ```
 
-Plugin verbs are wired into `railway_pipe`, and plugin-defined direct MCP tools are also registered at server startup. That gives you mixed mode from the start: pipe verbs plus standalone MCP tools loaded from local modules.
+Plugin verbs are wired into `toolflow_run`, and plugin-defined direct MCP tools are also registered at server startup. That gives you mixed mode from the start: pipe verbs plus standalone MCP tools loaded from local modules.
 
 ## MCP Bridge Plugins
 
@@ -174,7 +174,7 @@ Minimal MCP config:
 ## Scope
 
 - Bun-first MCP runtime
-- Railway-oriented pipeline execution with trace output
+- Compositional pipeline execution with trace output
 - Nushell-style structured data passing between steps
 - Configurable plugin loading
 
