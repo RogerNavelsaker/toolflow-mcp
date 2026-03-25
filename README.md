@@ -2,10 +2,11 @@
 
 `toolflow-mcp` is a Bun MCP server for compositional pipelines and Nushell-style data passing.
 
-The model-facing surface is intentionally small:
+The model-facing surface is intentionally minimal:
 
 - Binary: `toolflow`
-- Primary tool: `toolflow`
+- Optional shell alias: `tf`
+- Primary MCP tool: `toolflow`
 - Introspection tool: `toolflow_registry`
 
 The design takes inspiration from F# pipe-forward composition, higher-order functional combinators, and Nushell-style structured data flow, while keeping the MCP surface generic enough to evolve through local plugins instead of upstreaming every verb.
@@ -108,7 +109,7 @@ type PluginDefinition = {
 };
 ```
 
-Plugin verbs are wired into `toolflow`, and plugin-defined direct MCP tools are also registered at server startup. That gives you mixed mode from the start: pipe verbs plus standalone MCP tools loaded from local modules.
+Plugin verbs are wired into `toolflow`, which keeps the MCP surface to a single execution entrypoint while still allowing local plugin growth behind the flow DSL.
 
 ## MCP Bridge Plugins
 
@@ -116,12 +117,10 @@ Plugin verbs are wired into `toolflow`, and plugin-defined direct MCP tools are 
 
 Current mapping model:
 
-- Namespaced pipe verbs for composition: `flox.search_packages`
-- Bridge introspection tool: `flox_list_tools`
-- Generic bridge direct tool: `flox_call`
-- Selected explicit direct tools for high-value cases: `flox_search_packages`, `flox_install_package`, `flox_run_command`
+- Namespaced flow verbs for composition: `flox.search_packages`
+- No direct top-level MCP re-export for bridged tools
 
-The generic bridge helper launches the upstream MCP server over stdio, lists its tools, re-exposes them inside `toolflow`, and captures upstream stderr so startup banners do not leak into client sessions.
+The generic bridge helper launches the upstream MCP server over stdio, materializes namespaced flow verbs inside `toolflow`, and captures upstream stderr so startup banners do not leak into client sessions.
 
 Current first bridge:
 
@@ -177,6 +176,20 @@ Minimal MCP config:
 - Compositional pipeline execution with trace output
 - Nushell-style structured data passing between steps
 - Configurable plugin loading
+- One top-level MCP tool, with everything else expressed as flow verbs
+
+## CLI
+
+The binary also exposes local shell/operator subcommands:
+
+```bash
+toolflow registry
+toolflow status
+toolflow doctor
+toolflow help
+```
+
+`tf` is available as a short shell alias when the optional short output is installed.
 
 ## Next
 

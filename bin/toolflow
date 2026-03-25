@@ -1,3 +1,13 @@
 #!/usr/bin/env bun
 
-await import("../src/server.ts");
+import process from "node:process";
+import { runCli } from "../src/cli.ts";
+
+const [command, ...rest] = process.argv.slice(2);
+const wantsJson = rest.includes("--json");
+
+if (command === "registry" || command === "status" || command === "doctor" || command === "help") {
+  await runCli(command, process.cwd(), { json: wantsJson });
+} else {
+  await import("../src/server.ts");
+}
