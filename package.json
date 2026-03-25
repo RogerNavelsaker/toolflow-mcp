@@ -1,17 +1,17 @@
 {
   "name": "toolflow-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Pipe-oriented MCP server with config-loaded verbs and plugins",
   "license": "MIT",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/runtime-intel/toolflow-mcp.git"
+    "url": "https://github.com/RogerNavelsaker/toolflow-mcp.git"
   },
-  "homepage": "https://github.com/runtime-intel/toolflow-mcp#readme",
+  "homepage": "https://github.com/RogerNavelsaker/toolflow-mcp#readme",
   "bugs": {
-    "url": "https://github.com/runtime-intel/toolflow-mcp/issues"
+    "url": "https://github.com/RogerNavelsaker/toolflow-mcp/issues"
   },
   "keywords": [
     "bun",

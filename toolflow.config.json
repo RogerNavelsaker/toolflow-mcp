@@ -1,6 +1,14 @@
 {
   "plugins": [
     {
+      "name": "flox-bridge",
+      "module": "./src/plugins/flox-bridge.ts",
+      "enabled": true,
+      "config": {
+        "command": "flox-mcp"
+      }
+    },
+    {
       "name": "example-http",
       "module": "./src/plugins/example-http.ts",
       "enabled": false,

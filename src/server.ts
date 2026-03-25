@@ -11,7 +11,7 @@ const runtime = await loadRuntime(process.cwd());
 const server = new McpServer(
   {
     name: "toolflow-mcp",
-    version: "0.1.0",
+    version: "0.2.0",
   },
   {
     instructions:
@@ -50,6 +50,7 @@ server.registerTool(
   async () => {
     const payload = {
       verbs: listVerbs(runtime.registry),
+      tools: runtime.registry.plugins.flatMap((plugin) => (plugin.tools ?? []).map((tool) => ({ name: tool.name, plugin: plugin.name }))),
       configPath: runtime.configPath ?? null,
       secretsPath: runtime.secretsPath ?? null,
       pluginCount: runtime.registry.plugins.length,

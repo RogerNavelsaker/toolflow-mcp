@@ -75,11 +75,43 @@ export type ToolflowTool = {
   run: (args: Record<string, unknown>) => Promise<JsonValue> | JsonValue;
 };
 
+export type ToolDescriptor = {
+  name: string;
+  description?: string;
+  inputSchema?: Record<string, unknown>;
+  outputSchema?: Record<string, unknown>;
+};
+
+export type BridgeTransportConfig = {
+  command: string;
+  args?: string[];
+  env?: Record<string, string>;
+  cwd?: string;
+};
+
+export type BridgeToolMapping = {
+  upstreamTool: string;
+  exposeVerb?: boolean;
+  exposeDirectTool?: boolean;
+  verbName?: string;
+  directToolName?: string;
+  description?: string;
+};
+
+export type BridgeDefinition = {
+  name: string;
+  prefix: string;
+  description?: string;
+  transport: BridgeTransportConfig;
+  toolMappings?: BridgeToolMapping[];
+};
+
 export type PluginDefinition = {
   name: string;
   description?: string;
   verbs?: ToolflowVerb[];
   tools?: ToolflowTool[];
+  bridges?: BridgeDefinition[];
 };
 
 export type PluginConfigEntry = {

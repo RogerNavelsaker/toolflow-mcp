@@ -16,6 +16,7 @@ The design takes inspiration from F# pipe-forward composition and Nushell-style 
 - Preserve a functional "current value" through the pipeline.
 - Stop on failure and return a structured post-mortem trace.
 - Load new verbs from local modules via config and secrets files.
+- Bridge other MCP servers behind one client-visible MCP entry.
 
 ## DSL
 
@@ -108,6 +109,23 @@ type PluginDefinition = {
 
 Plugin verbs are wired into `railway_pipe`, and plugin-defined direct MCP tools are also registered at server startup. That gives you mixed mode from the start: pipe verbs plus standalone MCP tools loaded from local modules.
 
+## MCP Bridge Plugins
+
+`toolflow-mcp` can also bridge other stdio MCP servers.
+
+Current mapping model:
+
+- Namespaced pipe verbs for composition: `flox.search_packages`
+- Bridge introspection tool: `flox_list_tools`
+- Generic bridge direct tool: `flox_call`
+- Selected explicit direct tools for high-value cases: `flox_search_packages`, `flox_install_package`, `flox_run_command`
+
+The generic bridge helper launches the upstream MCP server over stdio, lists its tools, and re-exposes them inside `toolflow`.
+
+Current first bridge:
+
+- `flox-bridge` in [`src/plugins/flox-bridge.ts`](/home/rona/Repositories/@runtime-intel/toolflow-mcp/src/plugins/flox-bridge.ts)
+
 ## Built-In Verbs
 
 - `echo`: return the first argument or current value
@@ -117,6 +135,16 @@ Plugin verbs are wired into `railway_pipe`, and plugin-defined direct MCP tools 
 - `read`: read a UTF-8 file
 - `json`: parse the current string value as JSON
 - `tee`: run a side effect and preserve the current value
+
+## Bridge Verb Examples
+
+```text
+flox.search_packages '{"search_term":"python","limit":5}'
+```
+
+```text
+flox.run_command '{"working_dir":"/home/rona","environment_dir":"","command":"command -v bun"}'
+```
 
 ## Install
 
