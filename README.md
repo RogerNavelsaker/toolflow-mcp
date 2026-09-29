@@ -117,14 +117,13 @@ Plugin verbs are wired into `toolflow`, which keeps the MCP surface to a single 
 
 Current mapping model:
 
-- Namespaced flow verbs for composition: `flox.search_packages`
+- Namespaced flow verbs for composition
 - No direct top-level MCP re-export for bridged tools
 
-The generic bridge helper launches the upstream MCP server over stdio, materializes namespaced flow verbs inside `toolflow`, and captures upstream stderr so startup banners do not leak into client sessions.
+The generic bridge helper launches configured upstream MCP servers over stdio, materializes namespaced flow verbs inside `toolflow`, and captures upstream stderr so startup banners do not leak into client sessions.
 
-Current first bridge:
+Current bridge:
 
-- `flox-bridge` in [`src/plugins/flox-bridge.ts`](/home/rona/Repositories/@runtime-intel/toolflow-mcp/src/plugins/flox-bridge.ts)
 - `nixos-bridge` in [`src/plugins/nixos-bridge.ts`](/home/rona/Repositories/@runtime-intel/toolflow-mcp/src/plugins/nixos-bridge.ts)
 
 ## Built-In Verbs
@@ -137,15 +136,7 @@ Current first bridge:
 - `json`: parse the current string value as JSON
 - `tee`: run a side effect and preserve the current value
 
-## Bridge Verb Examples
-
-```text
-flox.search_packages '{"search_term":"python","limit":5}'
-```
-
-```text
-flox.run_command '{"working_dir":"/home/rona","environment_dir":"","command":"command -v bun"}'
-```
+## Bridge Verb Example
 
 ```text
 nixos.nix '{"action":"search","source":"nixos","type":"packages","query":"ripgrep","limit":3}'
